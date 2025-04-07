@@ -55,6 +55,8 @@ database.default.database = jewellery
 database.default.username = root
 database.default.password = yourpassword
 
+encryption.key = 'your encryption key'
+
 ```
 
 ### 5. Run Migrations & Seed (optional)
