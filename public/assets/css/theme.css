@@ -1,0 +1,27 @@
+
+/* theme.css */
+
+/* Global Blue-950 Buttons */
+.btn-blue-950 {
+  background-color: #1e3a8a;
+  color: #fff;
+  border: none;
+}
+
+.btn-blue-950:hover {
+  background-color: #172b65 !important;
+  color: #fff !important;
+}
+
+/* Card Theme */
+.card-theme {
+  border-radius: 0.75rem;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #1e3a8a;
+  background-color: #fff;
+}
+
+/* Text Color */
+.text-blue-950 {
+  color: #1e3a8a !important;
+}
