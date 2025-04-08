@@ -59,20 +59,34 @@ encryption.key = 'your encryption key'
 
 ```
 
-### 5. Run Migrations & Seed (optional)
+### 5. Create the writable folder
+
+```
+project-root/
+├── app/
+├── public/
+├── writable/
+│   ├── cache/        ← required for framework caching
+│   ├── debugbar/     ← for CI4 Debug Toolbar (if enabled)
+│   ├── logs/         ← to store logs
+│   ├── session/      ← to store session files (when using file-based session driver)
+│   └── uploads/ 
+```
+
+### 6. Run Migrations & Seed (optional)
 
 ```bash
 php spark migrate
 php spark seed
 ```
 
-### 6. Start the server
+### 7. Start the server
 
 ```
 php spark serve
 ```
 
-### 7. Visit the application in your browser
+### 8. Visit the application in your browser
 ```bash
 http://localhost:8000
 ```
