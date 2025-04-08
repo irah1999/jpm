@@ -28,6 +28,12 @@ class ProductService
 
         if ($imageFile && $imageFile->isValid()) {
             $imageName = $imageFile->getRandomName();
+
+            $uploadPath = FCPATH . 'uploads/';
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0755, true); // 0755 permission, recursive
+            }
+
             $imageFile->move('uploads/', $imageName);
 
             \Config\Services::image()
@@ -50,6 +56,10 @@ class ProductService
 
         if ($imageFile && $imageFile->isValid()) {
             $imageName = $imageFile->getRandomName();
+            $uploadPath = FCPATH . 'uploads/';
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0755, true); // 0755 permission, recursive
+            }
             $imageFile->move('uploads/', $imageName);
 
             \Config\Services::image()
