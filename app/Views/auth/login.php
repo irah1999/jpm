@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?= base_url('assets/css/bootstrap.min.css') ?>" rel="stylesheet">
     <!-- Font Awesome for Eye Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
@@ -89,17 +89,13 @@
                 </a>
 
                 <p class="mt-3 text-center">
-                    <a href="#">Forgot Password?</a>
-                </p>
-
-                <p class="mt-3 text-center">
                     Don't have an account? <a href="<?= route_to('signup') ?>">Signup</a>
                 </p>
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="<?= base_url('assets/js/jquery.min.js') ?>"></script>
+    <script src="<?= base_url('assets/js/bootstrap.bundle.min.js') ?>"></script>
     <script>
         $('#togglePassword').on('click', function() {
             const passwordField = $('#password');

@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Signup</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?= base_url('assets/css/bootstrap.min.css') ?>" rel="stylesheet">
+    <!-- Font Awesome for Eye Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
     <style>
@@ -103,8 +104,8 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="<?= base_url('assets/js/jquery.min.js') ?>"></script>
+    <script src="<?= base_url('assets/js/bootstrap.bundle.min.js') ?>"></script>
     <script>
         $('.toggle-password').on('click', function() {
             const target = $(this).data('target');

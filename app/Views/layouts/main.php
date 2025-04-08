@@ -4,12 +4,11 @@
 <head>
   <meta charset="utf-8">
   <title>Jewellery App</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+  <link href="<?= base_url('assets/css/bootstrap.min.css') ?>" rel="stylesheet">
+  <link href="<?= base_url('assets/css/jquery.dataTables.min.css') ?>" rel="stylesheet" />
   <link rel="stylesheet" href="<?= base_url('assets/css/theme.css') ?>">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="<?= base_url('assets/js/jquery.min.js') ?>"></script>
+  <script src="<?= base_url('assets/js/jquery.dataTables.min.js') ?>"></script>
 </head>
 
 <style>
