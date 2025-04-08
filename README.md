@@ -29,8 +29,8 @@ This app provides user authentication and CRUD operations for jewellery products
 ### 1. **Clone the repo**
 
 ```bash
-git clone https://github.com/yourname/jewellery-ci4.git
-cd jewellery-ci4
+git clone https://github.com/irah1999/jpm.git
+cd jpm
 ```
 
 ### 2.Install Dependencies
@@ -42,7 +42,7 @@ composer install
 ### 3. Setup Environment
 
 ```bash
-cp env .env
+cp env.example .env
 ```
 
 ### 4. Update .env file with your database details:

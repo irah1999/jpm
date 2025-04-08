@@ -23,7 +23,7 @@
         <?php if ($user): ?>
           <span class="me-3 text-muted">Welcome, <strong><?= esc($user['name']) ?></strong></span>
           <img src="<?= base_url('uploads/profile/' . ($user['image'] ?? 'avatar.svg' )) ?>" alt="Profile" class="rounded-circle" width="40" height="40">
-          <a href="<?= site_url('logout') ?>" class="btn btn-outline-secondary ms-3">Logout</a>
+          <a href="<?= route_to('logout') ?>" class="btn btn-outline-secondary ms-3">Logout</a>
         <?php else: ?>
           <a href="<?= site_url('login') ?>" class="btn btn-primary">Login</a>
         <?php endif; ?>
