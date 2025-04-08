@@ -25,3 +25,7 @@
 .text-blue-950 {
   color: #1e3a8a !important;
 }
+
+a {
+  text-decoration: none;
+}

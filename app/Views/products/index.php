@@ -11,22 +11,26 @@
         <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
     <?php endif; ?>
     <div class="d-flex justify-content-end">
-      <a href="<?= site_url('products/create') ?>" class="btn btn-blue-950 mb-3 btn-sm">+ Add Product</a>
+      <a href="<?= site_url(route_to('products.create')) ?>" class="btn btn-blue-950 mb-3 btn-sm me-2">+ Add Product</a>
     </div>
 
-    <table id="products-table" class="table table-bordered">
-      <thead class="table-light">
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Category</th>
-          <th>Price</th>
-          <th>Description</th>
-          <th style="min-width:70px;">Image</th>
-          <th style="min-width:110px;">Actions</th>
-        </tr>
-      </thead>
-    </table>
+    <div class="table-responsive">
+      <table id="products-table" class="table table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Updated At</th>
+            <th style="min-width:70px;">Image</th>
+            <th style="min-width:110px;">Actions</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
   </div>
 </div>
 
@@ -37,6 +41,7 @@
       processing: true,
       serverSide: true,
       pageLength: 10,
+      order: [[6, 'desc']], // Default order by 7th column (index starts from 0)
       ajax: "<?= site_url('products/datatables') ?>",
       columns: [
         { data: 'id' },
@@ -44,7 +49,9 @@
         { data: 'category_name' },
         { data: 'price' },
         { data: 'description' },
-        { 
+        { data: 'status' },
+        { data: 'updated_at' },
+        {
           data: 'image',
           render: function(data) {
             return `<img src="/uploads/${data}" height="50">`;

@@ -21,3 +21,13 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
     $routes->post('products/delete', 'ProductController::delete', ['as' => 'products.delete']);
     $routes->get('products/datatables', 'ProductController::datatables', ['as' => 'products.datatables']);
 });
+
+$routes->group('categories', ['namespace' => 'App\Controllers'], function ($routes) {
+    $routes->get('/', 'CategoryController::index', ['as' => 'categories.index']);
+    $routes->get('create', 'CategoryController::create', ['as' => 'categories.create']);
+    $routes->post('store', 'CategoryController::store', ['as' => 'categories.store']);
+    $routes->get('edit/(:any)', 'CategoryController::edit/$1', ['as' => 'categories.edit']);
+    $routes->post('update/(:num)', 'CategoryController::update/$1', ['as' => 'categories.update']);
+    $routes->post('delete', 'CategoryController::delete', ['as' => 'categories.delete']);
+    $routes->get('datatables', 'CategoryController::datatables', ['as' => 'categories.datatables']);
+});

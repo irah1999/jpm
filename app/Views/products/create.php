@@ -3,7 +3,8 @@
 
 <div class="container mt-4">
   <div class="card card-theme p-4 mb-4">
-    <h4 class="text-blue-950 mb-3">Create Product</h4>
+    <h4 class="text-blue-950 mb-3"><a href="<?= route_to('products.index') ?>"><i class="fa-solid fa-arrow-left"></i>
+    </a> Create Product</h4>
     <?php if (session()->getFlashdata('error')): ?>
         <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
     <?php endif; ?>

@@ -3,13 +3,14 @@
 
 <div class="container mt-4">
   <div class="card card-theme p-4 mb-4">
-    <h4 class="text-blue-950 mb-3">Edit Product</h4>
+    <h4 class="text-blue-950 mb-3"><a href="<?= route_to('products.index') ?>"><i class="fa-solid fa-arrow-left"></i>
+      </a> Edit Product</h4>
 
     <?php if (session()->getFlashdata('error')): ?>
-        <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
+      <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
     <?php endif; ?>
     <?php if (session()->getFlashdata('success')): ?>
-        <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
+      <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
     <?php endif; ?>
 
     <form action="<?= site_url('products/update') ?>" method="post" enctype="multipart/form-data">
@@ -50,6 +51,18 @@
       <div class="mb-3">
         <label for="image" class="form-label">New Image (optional)</label>
         <input type="file" name="image" class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label>Status</label><br>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" id="status_active" name="status" value="1" <?= old('status', $product['status']) == '1' ? 'checked' : '' ?>>
+          <label class="form-check-label" for="status_active">Active</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" id="status_inactive" name="status" value="0" <?= old('status', $product['status']) == '0' ? 'checked' : '' ?>>
+          <label class="form-check-label" for="status_inactive">Inactive</label>
+        </div>
       </div>
 
       <button type="submit" class="btn btn-blue-950">Update Product</button>

@@ -5,45 +5,36 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\ProductModel;
 use App\Models\CategoryModel;
-use CodeIgniter\HTTP\RequestInterface;
+use App\Services\ProductService;
 
 class ProductController extends BaseController
 {
-    protected $productModel;
-    protected $categoryModel;
+    protected $productService;
 
     public function __construct()
     {
-        helper('call_helper'); // for app/Helpers/my_helper.php
-        $this->productModel = new ProductModel();
-        $this->categoryModel = new CategoryModel();
+        helper('call_helper');
+        $this->productService = new ProductService(new ProductModel(), new CategoryModel());
     }
 
-    // Product list page
     public function index()
     {
         return view('products/index');
     }
 
-    // DataTables ajax
     public function getProducts()
     {
-        $request = service('request');
-        $postData = $request->getPost();
-
-        $products = $this->productModel->getDatatables($postData);
+        $postData = $this->request->getPost();
+        $products = $this->productService->getDatatables($postData);
         return $this->response->setJSON($products);
     }
 
-    // Show create form
     public function create()
     {
-        $data['categories'] = $this->categoryModel->where('status', 1)->findAll();
-
+        $data['categories'] = $this->productService->getCategories();
         return view('products/create', $data);
     }
 
-    // Save new product
     public function store()
     {
         $rules = [
@@ -57,70 +48,48 @@ class ProductController extends BaseController
                     'is_not_unique' => 'Selected category does not exist.',
                 ]
             ],
-            'image' => 'uploaded[image]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png,image/webp]|max_size[image,2048]', // 2MB max
+            'image' => 'uploaded[image]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png,image/webp]|max_size[image,2048]',
         ];
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', implode(', ', $this->validator->getErrors()));
         }
 
-        $imageName = null;
-        $imageFile = $this->request->getFile('image');
-        if ($imageFile && $imageFile->isValid()) {
-            $imageName = $imageFile->getRandomName();
-            $imageFile->move('uploads/', $imageName);
+        $data = $this->request->getPost();
+        $image = $this->request->getFile('image');
 
-            // Resize using CodeIgniter Image Manipulation
-            \Config\Services::image()
-                ->withFile('uploads/' . $imageName)
-                ->resize(500, 500, true, 'width')
-                ->save('uploads/' . $imageName);
-        }
-
-        $this->productModel->save([
-            'name'        => $this->request->getPost('name'),
-            'description' => $this->request->getPost('description'),
-            'price'       => $this->request->getPost('price'),
-            'category_id' => $this->request->getPost('category_id'),
-            'image'       => $imageName,
-        ]);
+        $this->productService->saveProduct($data, $image);
 
         return redirect()->to(route_to('products.index'))->with('success', 'Product created successfully!');
     }
 
-    // Show edit form
     public function edit($id)
     {
         $id = decryption($id);
-        
-        $data['product'] = $this->productModel->find($id);
-        $data['categories'] = $this->categoryModel->findAll();
+        $product = $this->productService->findProduct($id);
 
-        if (!$data['product']) {
+        if (!$product) {
             return redirect()->to(route_to('products.index'))->with('error', 'Product not found');
         }
-        // echo "<pre>";
-        // print_r($data);die;
+
+        $data = [
+            'product' => $product,
+            'categories' => $this->productService->getCategories(),
+        ];
+
         return view('products/edit', $data);
     }
 
-    // Update product
     public function update()
     {
         try {
-
-            $id = $this->request->getPost('id');
-    
-            $id = decryption($id);
-            $product = $this->productModel->find($id);
-            if (!$product) {
-                return redirect()->to(route_to('products.index'))->with('error', 'Product not found');
-            }
+            $id = decryption($this->request->getPost('id'));
     
             $rules = [
-                'name'        => 'required',
+                'name' => 'required',
                 'description' => 'required',
-                'price'       => 'required|decimal',
+                'price' => 'required|decimal',
+                'status' => 'required|in_list[0,1]',
                 'category_id' => [
                     'label' => 'Category',
                     'rules' => 'required|integer|is_not_unique[categories.id]',
@@ -128,71 +97,45 @@ class ProductController extends BaseController
                         'is_not_unique' => 'Selected category does not exist.',
                     ]
                 ],
-                'image'       => 'uploaded[image]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png,image/webp]|max_size[image,2048]', // 2MB max
             ];
+    
+            // Only validate image if a file is uploaded
+            $image = $this->request->getFile('image');
+            if ($image && $image->isValid() && !$image->hasMoved()) {
+                $rules['image'] = 'is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png,image/webp]|max_size[image,2048]';
+            }
     
             if (!$this->validate($rules)) {
                 return redirect()->back()->withInput()->with('error', implode(', ', $this->validator->getErrors()));
             }
     
-            $imageName = $product['image'];
-            $imageFile = $this->request->getFile('image');
+            $data = $this->request->getPost();
     
-            if ($imageFile && $imageFile->isValid()) {
-                $imageName = $imageFile->getRandomName();
-                $imageFile->move('uploads/', $imageName);
-    
-                \Config\Services::image()
-                    ->withFile('uploads/' . $imageName)
-                    ->resize(500, 500, true, 'width')
-                    ->save('uploads/' . $imageName);
-    
-                // Delete old image
-                if (file_exists('uploads/' . $product['image'])) {
-                    unlink('uploads/' . $product['image']);
-                }
-            }
-    
-            $this->productModel->update($id, [
-                'name'        => $this->request->getPost('name'),
-                'description' => $this->request->getPost('description'),
-                'price'       => $this->request->getPost('price'),
-                'category_id' => $this->request->getPost('category_id'),
-                'image'       => $imageName,
-            ]);
+            $this->productService->updateProduct($id, $data, $image);
     
             return redirect()->to(route_to('products.index'))->with('success', 'Product updated successfully!');
         } catch (\Exception $e) {
             return redirect()->to(route_to('products.index'))->with('error', $e->getMessage());
         }
     }
+    
 
-    // Delete product
     public function delete()
     {
-        $id = $this->request->getPost('id');
-        $id = decryption($id);
-        $product = $this->productModel->find($id);
-        if (!$product) {
+        $id = decryption($this->request->getPost('id'));
+
+        if (!$this->productService->deleteProduct($id)) {
             return redirect()->to(route_to('products.index'))->with('error', 'Product not found');
         }
-
-        if ($product['image'] && file_exists('uploads/' . $product['image'])) {
-            unlink('uploads/' . $product['image']);
-        }
-
-        $this->productModel->delete($id);
 
         return redirect()->to(route_to('products.index'))->with('success', 'Product deleted successfully!');
     }
 
-
     public function datatables()
     {
         $request = service('request');
-        $productModel = new ProductModel();
-        $data = $productModel->getDatatables($request);
-    
+        $data = $this->productService->getDatatables($request);
+
         return $this->response->setJSON([
             'draw' => intval($request->getGet('draw')),
             'recordsTotal' => $data['totalRecords'],
@@ -200,5 +143,4 @@ class ProductController extends BaseController
             'data' => $data['data'],
         ]);
     }
-
 }
